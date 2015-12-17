@@ -4,5 +4,6 @@ FactoryGirl.define do
     last_name { Faker::Name.last_name }
     email { Faker::Internet.email }
     title { Faker::Name.title }
+    business
   end
 end
