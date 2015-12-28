@@ -13,6 +13,10 @@ gem "pg"
 gem "rack-cors", require: "rack/cors"
 gem "sass-rails", "~> 4.0.3"
 gem "uglifier", ">= 1.3.0"
+# M3u8 generator
+gem "m3uzi"
+gem "paperclip", "~> 4.3"
+
 
 group :development do
   gem "better_errors"

@@ -1,0 +1,432 @@
+  [1m[36m (38.5ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL) [0m
+  [1m[35m (2.8ms)[0m  CREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")
+  [1m[36mActiveRecord::SchemaMigration Load (1.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to DeviseCreateAdminUsers (20151214221216)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (21.4ms)[0m  [1mCREATE TABLE "admin_users" ("id" serial primary key, "email" character varying DEFAULT '' NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" timestamp, "last_sign_in_at" timestamp, "current_sign_in_ip" inet, "last_sign_in_ip" inet, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) [0m
+  [1m[35m (1.7ms)[0m  CREATE UNIQUE INDEX  "index_admin_users_on_email" ON "admin_users"  ("email")
+  [1m[36m (1.6ms)[0m  [1mCREATE UNIQUE INDEX  "index_admin_users_on_reset_password_token" ON "admin_users"  ("reset_password_token")[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20151214221216"]]
+  [1m[36m (1.0ms)[0m  [1mCOMMIT[0m
+Migrating to CreateActiveAdminComments (20151214221227)
+  [1m[35m (0.3ms)[0m  BEGIN
+DEPRECATION WARNING: `#timestamp` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /Users/cometman/Developer/ember-api/db/migrate/20151214221227_create_active_admin_comments.rb:9)
+  [1m[36m (4.9ms)[0m  [1mCREATE TABLE "active_admin_comments" ("id" serial primary key, "namespace" character varying, "body" text, "resource_id" character varying NOT NULL, "resource_type" character varying NOT NULL, "author_id" integer, "author_type" character varying, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (2.9ms)[0m  CREATE  INDEX  "index_active_admin_comments_on_namespace" ON "active_admin_comments"  ("namespace")
+  [1m[36m (1.4ms)[0m  [1mCREATE  INDEX  "index_active_admin_comments_on_author_type_and_author_id" ON "active_admin_comments"  ("author_type", "author_id")[0m
+  [1m[35m (1.6ms)[0m  CREATE  INDEX  "index_active_admin_comments_on_resource_type_and_resource_id" ON "active_admin_comments"  ("resource_type", "resource_id")
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20151214221227"]]
+  [1m[35m (1.0ms)[0m  COMMIT
+Migrating to CreateContacts (20151214222306)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (4.0ms)[0m  CREATE TABLE "contacts" ("id" serial primary key, "first_name" character varying, "last_name" character varying, "email" character varying, "title" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20151214222306"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to CreateBusinesses (20151216231352)
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (5.1ms)[0m  CREATE TABLE "businesses" ("id" serial primary key, "name" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20151216231352"]]
+  [1m[35m (0.8ms)[0m  COMMIT
+Migrating to AddBusinessRefToContacts (20151216234034)
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (1.2ms)[0m  ALTER TABLE "contacts" ADD "business_id" integer
+  [1m[36m (1.5ms)[0m  [1mCREATE  INDEX  "index_contacts_on_business_id" ON "contacts"  ("business_id")[0m
+  [1m[35m (9.6ms)[0m  ALTER TABLE "contacts" ADD CONSTRAINT "fk_rails_5d1918d88d"
+FOREIGN KEY ("business_id")
+  REFERENCES "businesses" ("id")
+
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20151216234034"]]
+  [1m[35m (0.5ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (4.1ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'active_admin_comments'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (3.4ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'admin_users'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (3.5ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'businesses'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (3.2ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'contacts'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+
+
+Started GET "/" for ::1 at 2015-12-27 16:35:29 -0600
+  [1m[36mActiveRecord::SchemaMigration Load (3.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by Rails::WelcomeController#index as HTML
+  Rendered /Users/cometman/.rvm/gems/ruby-2.2.0/gems/railties-4.2.1/lib/rails/templates/rails/welcome/index.html.erb (5.8ms)
+Completed 200 OK in 27ms (Views: 26.5ms | ActiveRecord: 0.0ms)
+  [1m[36mActiveRecord::SchemaMigration Load (2.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateVideoFragments (20151227231041)
+  [1m[35m (1.5ms)[0m  BEGIN
+  [1m[36m (27.6ms)[0m  [1mCREATE TABLE "video_fragments" ("id" serial primary key, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) [0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20151227231041"]]
+  [1m[36m (2.6ms)[0m  [1mCOMMIT[0m
+Migrating to AddAttachmentFragmentToVideoFragments (20151228190327)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (4.4ms)[0m  [1mALTER TABLE "video_fragments" ADD "fragment_file_name" character varying[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "video_fragments" ADD "fragment_content_type" character varying
+  [1m[36m (0.5ms)[0m  [1mALTER TABLE "video_fragments" ADD "fragment_file_size" integer[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "video_fragments" ADD "fragment_updated_at" timestamp
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20151228190327"]]
+  [1m[35m (0.6ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (4.7ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'active_admin_comments'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.5ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'admin_users'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.3ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'businesses'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.1ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'contacts'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.0ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'video_fragments'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+
+
+Started GET "/contacts" for ::1 at 2015-12-28 13:07:00 -0600
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+
+ActionController::RoutingError (No route matches [GET] "/contacts"):
+  actionpack (4.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:21:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/show_exceptions.rb:30:in `call'
+  railties (4.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+  railties (4.2.1) lib/rails/rack/logger.rb:20:in `block in call'
+  activesupport (4.2.1) lib/active_support/tagged_logging.rb:68:in `block in tagged'
+  activesupport (4.2.1) lib/active_support/tagged_logging.rb:26:in `tagged'
+  activesupport (4.2.1) lib/active_support/tagged_logging.rb:68:in `tagged'
+  railties (4.2.1) lib/rails/rack/logger.rb:20:in `call'
+  quiet_assets (1.1.0) lib/quiet_assets.rb:27:in `call_with_quiet_assets'
+  actionpack (4.2.1) lib/action_dispatch/middleware/request_id.rb:21:in `call'
+  rack (1.6.4) lib/rack/methodoverride.rb:22:in `call'
+  rack (1.6.4) lib/rack/runtime.rb:18:in `call'
+  activesupport (4.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:28:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/static.rb:113:in `call'
+  rack (1.6.4) lib/rack/sendfile.rb:113:in `call'
+  railties (4.2.1) lib/rails/engine.rb:518:in `call'
+  railties (4.2.1) lib/rails/application.rb:164:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  rack (1.6.4) lib/rack/content_length.rb:15:in `call'
+  rack (1.6.4) lib/rack/handler/webrick.rb:88:in `service'
+  /Users/cometman/.rvm/rubies/ruby-2.0.0-p598/lib/ruby/2.0.0/webrick/httpserver.rb:138:in `service'
+  /Users/cometman/.rvm/rubies/ruby-2.0.0-p598/lib/ruby/2.0.0/webrick/httpserver.rb:94:in `run'
+  /Users/cometman/.rvm/rubies/ruby-2.0.0-p598/lib/ruby/2.0.0/webrick/server.rb:295:in `block in start_thread'
+
+
+  Rendered /Users/cometman/.rvm/gems/ruby-2.0.0-p598/gems/actionpack-4.2.1/lib/action_dispatch/middleware/templates/rescues/_trace.html.erb (1.5ms)
+  Rendered /Users/cometman/.rvm/gems/ruby-2.0.0-p598/gems/actionpack-4.2.1/lib/action_dispatch/middleware/templates/routes/_route.html.erb (4.1ms)
+  Rendered /Users/cometman/.rvm/gems/ruby-2.0.0-p598/gems/actionpack-4.2.1/lib/action_dispatch/middleware/templates/routes/_route.html.erb (0.2ms)
+  Rendered /Users/cometman/.rvm/gems/ruby-2.0.0-p598/gems/actionpack-4.2.1/lib/action_dispatch/middleware/templates/routes/_table.html.erb (8.5ms)
+  Rendered /Users/cometman/.rvm/gems/ruby-2.0.0-p598/gems/actionpack-4.2.1/lib/action_dispatch/middleware/templates/rescues/_request_and_response.html.erb (15.6ms)
+  Rendered /Users/cometman/.rvm/gems/ruby-2.0.0-p598/gems/actionpack-4.2.1/lib/action_dispatch/middleware/templates/rescues/routing_error.html.erb within rescues/layout (86.4ms)
+
+
+Started GET "/contacts" for ::1 at 2015-12-28 13:07:25 -0600
+
+ActionController::RoutingError - uninitialized constant ContactsController:
+  actionpack (4.2.1) lib/action_dispatch/routing/route_set.rb:63:in `rescue in controller'
+  actionpack (4.2.1) lib/action_dispatch/routing/route_set.rb:58:in `controller'
+  actionpack (4.2.1) lib/action_dispatch/routing/route_set.rb:39:in `serve'
+  actionpack (4.2.1) lib/action_dispatch/journey/router.rb:43:in `block in serve'
+  actionpack (4.2.1) lib/action_dispatch/journey/router.rb:30:in `serve'
+  actionpack (4.2.1) lib/action_dispatch/routing/route_set.rb:819:in `call'
+  meta_request (0.3.4) lib/meta_request/middlewares/app_request_handler.rb:13:in `call'
+  meta_request (0.3.4) lib/meta_request/middlewares/meta_request_handler.rb:13:in `call'
+  rack-cors (0.4.0) lib/rack/cors.rb:80:in `call'
+  warden (1.2.4) lib/warden/manager.rb:35:in `block in call'
+  warden (1.2.4) lib/warden/manager.rb:34:in `call'
+  rack (1.6.4) lib/rack/etag.rb:24:in `call'
+  rack (1.6.4) lib/rack/conditionalget.rb:25:in `call'
+  rack (1.6.4) lib/rack/head.rb:13:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/params_parser.rb:27:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/flash.rb:260:in `call'
+  rack (1.6.4) lib/rack/session/abstract/id.rb:225:in `context'
+  rack (1.6.4) lib/rack/session/abstract/id.rb:220:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/cookies.rb:560:in `call'
+  activerecord (4.2.1) lib/active_record/query_cache.rb:36:in `call'
+  activerecord (4.2.1) lib/active_record/connection_adapters/abstract/connection_pool.rb:649:in `call'
+  activerecord (4.2.1) lib/active_record/migration.rb:378:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+  activesupport (4.2.1) lib/active_support/callbacks.rb:88:in `_run_callbacks'
+  activesupport (4.2.1) lib/active_support/callbacks.rb:776:in `_run_call_callbacks'
+  activesupport (4.2.1) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (4.2.1) lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/reloader.rb:73:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/remote_ip.rb:78:in `call'
+  better_errors (2.1.1) lib/better_errors/middleware.rb:84:in `protected_app_call'
+  better_errors (2.1.1) lib/better_errors/middleware.rb:79:in `better_errors_call'
+  better_errors (2.1.1) lib/better_errors/middleware.rb:57:in `call'
+  rack-contrib (1.4.0) lib/rack/contrib/response_headers.rb:17:in `call'
+  meta_request (0.3.4) lib/meta_request/middlewares/headers.rb:16:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:17:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/show_exceptions.rb:30:in `call'
+  railties (4.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+  railties (4.2.1) lib/rails/rack/logger.rb:20:in `block in call'
+  activesupport (4.2.1) lib/active_support/tagged_logging.rb:68:in `block in tagged'
+  activesupport (4.2.1) lib/active_support/tagged_logging.rb:26:in `tagged'
+  activesupport (4.2.1) lib/active_support/tagged_logging.rb:68:in `tagged'
+  railties (4.2.1) lib/rails/rack/logger.rb:20:in `call'
+  quiet_assets (1.1.0) lib/quiet_assets.rb:27:in `call_with_quiet_assets'
+  actionpack (4.2.1) lib/action_dispatch/middleware/request_id.rb:21:in `call'
+  rack (1.6.4) lib/rack/methodoverride.rb:22:in `call'
+  rack (1.6.4) lib/rack/runtime.rb:18:in `call'
+  activesupport (4.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:28:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  actionpack (4.2.1) lib/action_dispatch/middleware/static.rb:113:in `call'
+  rack (1.6.4) lib/rack/sendfile.rb:113:in `call'
+  railties (4.2.1) lib/rails/engine.rb:518:in `call'
+  railties (4.2.1) lib/rails/application.rb:164:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  rack (1.6.4) lib/rack/content_length.rb:15:in `call'
+  rack (1.6.4) lib/rack/handler/webrick.rb:88:in `service'
+  /Users/cometman/.rvm/rubies/ruby-2.0.0-p598/lib/ruby/2.0.0/webrick/httpserver.rb:138:in `service'
+  /Users/cometman/.rvm/rubies/ruby-2.0.0-p598/lib/ruby/2.0.0/webrick/httpserver.rb:94:in `run'
+  /Users/cometman/.rvm/rubies/ruby-2.0.0-p598/lib/ruby/2.0.0/webrick/server.rb:295:in `block in start_thread'
+
+
+
+Started GET "/documentation" for ::1 at 2015-12-28 13:11:59 -0600
+Processing by GrapeSwaggerRails::ApplicationController#index as HTML
+  Rendered /Users/cometman/.rvm/gems/ruby-2.0.0-p598/gems/grape-swagger-rails-0.1.0/app/views/grape_swagger_rails/application/index.html.erb (852.7ms)
+Completed 200 OK in 862ms (Views: 861.6ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/api/v1/swagger_doc" for ::1 at 2015-12-28 13:12:01 -0600
+
+
+Started GET "/api/v1/swagger_doc" for ::1 at 2015-12-28 13:12:01 -0600
+
+
+Started GET "/api/v1/swagger_doc/contacts" for ::1 at 2015-12-28 13:12:01 -0600
+
+
+Started GET "/api/v1/swagger_doc/contacts" for ::1 at 2015-12-28 13:12:01 -0600
+
+
+Started GET "/api/v1/contacts" for ::1 at 2015-12-28 13:12:10 -0600
+  [1m[35mContact Load (4.7ms)[0m  SELECT "contacts".* FROM "contacts"
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mAdminUser Exists (4.3ms)[0m  [1mSELECT  1 AS one FROM "admin_users" WHERE "admin_users"."email" = 'admin@example.com' LIMIT 1[0m
+  [1m[35mSQL (4.7ms)[0m  INSERT INTO "admin_users" ("email", "encrypted_password", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["email", "admin@example.com"], ["encrypted_password", "$2a$10$T18MLnwVpYjUGJPAxViXHeKC4x0LYS1/pNMpPj.VHL0XseH1GfSya"], ["created_at", "2015-12-28 19:12:34.524540"], ["updated_at", "2015-12-28 19:12:34.524540"]]
+  [1m[36m (1.8ms)[0m  [1mCOMMIT[0m
+  [1m[36mContact Load (1.0ms)[0m  [1mSELECT "contacts".* FROM "contacts"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mAdminUser Exists (4.8ms)[0m  [1mSELECT  1 AS one FROM "admin_users" WHERE "admin_users"."email" = 'admin@example.com' LIMIT 1[0m
+  [1m[35m (0.9ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mAdminUser Exists (0.9ms)[0m  [1mSELECT  1 AS one FROM "admin_users" WHERE "admin_users"."email" = 'admin@example.com' LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.1ms)[0m  INSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["name", "MyString"], ["created_at", "2015-12-28 20:00:27.873739"], ["updated_at", "2015-12-28 20:00:27.873739"]]
+  [1m[36m (1.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mContact Exists (0.5ms)[0m  [1mSELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'warren@howell.net' LIMIT 1[0m
+  [1m[35mSQL (10.6ms)[0m  INSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"  [["first_name", "Daniella"], ["last_name", "Daniel"], ["email", "warren@howell.net"], ["title", "Corporate Metrics Coordinator"], ["business_id", 1], ["created_at", "2015-12-28 20:00:27.896813"], ["updated_at", "2015-12-28 20:00:27.896813"]]
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "MyString"], ["created_at", "2015-12-28 20:00:27.915750"], ["updated_at", "2015-12-28 20:00:27.915750"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mContact Exists (0.4ms)[0m  SELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'alejandrin@beahan.io' LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["first_name", "Vena"], ["last_name", "Blanda"], ["email", "alejandrin@beahan.io"], ["title", "Investor Security Administrator"], ["business_id", 2], ["created_at", "2015-12-28 20:00:27.929737"], ["updated_at", "2015-12-28 20:00:27.929737"]]
+  [1m[35m (0.6ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["name", "MyString"], ["created_at", "2015-12-28 20:00:27.940049"], ["updated_at", "2015-12-28 20:00:27.940049"]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mContact Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'gladyce.cormier@gleason.name' LIMIT 1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"  [["first_name", "Eugenia"], ["last_name", "Kuphal"], ["email", "gladyce.cormier@gleason.name"], ["title", "Future Usability Consultant"], ["business_id", 3], ["created_at", "2015-12-28 20:00:27.949500"], ["updated_at", "2015-12-28 20:00:27.949500"]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "MyString"], ["created_at", "2015-12-28 20:00:27.957844"], ["updated_at", "2015-12-28 20:00:27.957844"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mContact Exists (0.3ms)[0m  SELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'tyreek@abshire.name' LIMIT 1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["first_name", "Mauricio"], ["last_name", "Dietrich"], ["email", "tyreek@abshire.name"], ["title", "Legacy Integration Liaison"], ["business_id", 4], ["created_at", "2015-12-28 20:00:27.967338"], ["updated_at", "2015-12-28 20:00:27.967338"]]
+  [1m[35m (0.6ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["name", "MyString"], ["created_at", "2015-12-28 20:00:27.976926"], ["updated_at", "2015-12-28 20:00:27.976926"]]
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mContact Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'bradford@gorczanydeckow.io' LIMIT 1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"  [["first_name", "Gene"], ["last_name", "Murphy"], ["email", "bradford@gorczanydeckow.io"], ["title", "Principal Factors Analyst"], ["business_id", 5], ["created_at", "2015-12-28 20:00:27.986626"], ["updated_at", "2015-12-28 20:00:27.986626"]]
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "MyString"], ["created_at", "2015-12-28 20:00:27.995045"], ["updated_at", "2015-12-28 20:00:27.995045"]]
+  [1m[35m (0.5ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mContact Exists (0.3ms)[0m  SELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'milton@baumbach.biz' LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["first_name", "Travis"], ["last_name", "Bahringer"], ["email", "milton@baumbach.biz"], ["title", "Future Optimization Director"], ["business_id", 6], ["created_at", "2015-12-28 20:00:28.003778"], ["updated_at", "2015-12-28 20:00:28.003778"]]
+  [1m[35m (0.5ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["name", "MyString"], ["created_at", "2015-12-28 20:00:28.011857"], ["updated_at", "2015-12-28 20:00:28.011857"]]
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mContact Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'melia.hand@bogisich.com' LIMIT 1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"  [["first_name", "Tyrel"], ["last_name", "Feil"], ["email", "melia.hand@bogisich.com"], ["title", "Chief Division Planner"], ["business_id", 7], ["created_at", "2015-12-28 20:00:28.022512"], ["updated_at", "2015-12-28 20:00:28.022512"]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "MyString"], ["created_at", "2015-12-28 20:00:28.030856"], ["updated_at", "2015-12-28 20:00:28.030856"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mContact Exists (0.4ms)[0m  SELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'alison@schneidertowne.info' LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["first_name", "Gladyce"], ["last_name", "Steuber"], ["email", "alison@schneidertowne.info"], ["title", "Global Factors Assistant"], ["business_id", 8], ["created_at", "2015-12-28 20:00:28.044889"], ["updated_at", "2015-12-28 20:00:28.044889"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["name", "MyString"], ["created_at", "2015-12-28 20:00:28.056077"], ["updated_at", "2015-12-28 20:00:28.056077"]]
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mContact Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'violette.gulgowski@runte.net' LIMIT 1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"  [["first_name", "Alexane"], ["last_name", "White"], ["email", "violette.gulgowski@runte.net"], ["title", "District Quality Executive"], ["business_id", 9], ["created_at", "2015-12-28 20:00:28.077351"], ["updated_at", "2015-12-28 20:00:28.077351"]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "businesses" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "MyString"], ["created_at", "2015-12-28 20:00:28.086545"], ["updated_at", "2015-12-28 20:00:28.086545"]]
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mContact Exists (0.3ms)[0m  SELECT  1 AS one FROM "contacts" WHERE "contacts"."email" = 'elvie_kulas@reichel.com' LIMIT 1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "contacts" ("first_name", "last_name", "email", "title", "business_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["first_name", "Lilyan"], ["last_name", "Krajcik"], ["email", "elvie_kulas@reichel.com"], ["title", "Forward Factors Representative"], ["business_id", 10], ["created_at", "2015-12-28 20:00:28.095732"], ["updated_at", "2015-12-28 20:00:28.095732"]]
+  [1m[35m (0.6ms)[0m  COMMIT
+
+
+Started GET "/api/v1/contacts" for ::1 at 2015-12-28 14:00:52 -0600
+  [1m[36mContact Load (2.6ms)[0m  [1mSELECT "contacts".* FROM "contacts"[0m
+
+
+Started GET "/api/v1/contacts/1" for ::1 at 2015-12-28 14:01:09 -0600
+  [1m[35mContact Load (1.8ms)[0m  SELECT  "contacts".* FROM "contacts" WHERE "contacts"."id" = $1  ORDER BY "contacts"."id" ASC LIMIT 1  [["id", 1]]
+
+
+Started GET "/documentation" for ::1 at 2015-12-28 14:01:46 -0600
+Processing by GrapeSwaggerRails::ApplicationController#index as HTML
+  Rendered /Users/cometman/.rvm/gems/ruby-2.0.0-p598/gems/grape-swagger-rails-0.1.0/app/views/grape_swagger_rails/application/index.html.erb (189.6ms)
+Completed 200 OK in 197ms (Views: 196.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/api/v1/swagger_doc" for ::1 at 2015-12-28 14:01:47 -0600
+
+
+Started GET "/api/v1/swagger_doc" for ::1 at 2015-12-28 14:01:47 -0600
+
+
+Started GET "/api/v1/swagger_doc/contacts" for ::1 at 2015-12-28 14:01:47 -0600
+
+
+Started GET "/api/v1/swagger_doc/contacts" for ::1 at 2015-12-28 14:01:47 -0600
+
+
+Started GET "/documentation" for ::1 at 2015-12-28 14:02:26 -0600
+Processing by GrapeSwaggerRails::ApplicationController#index as HTML
+  Rendered /Users/cometman/.rvm/gems/ruby-2.0.0-p598/gems/grape-swagger-rails-0.1.0/app/views/grape_swagger_rails/application/index.html.erb (187.4ms)
+Completed 200 OK in 196ms (Views: 196.1ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/api/v1/swagger_doc" for ::1 at 2015-12-28 14:02:27 -0600
+
+
+Started GET "/api/v1/swagger_doc" for ::1 at 2015-12-28 14:02:27 -0600
+
+
+Started GET "/api/v1/swagger_doc/contacts" for ::1 at 2015-12-28 14:02:27 -0600
+
+
+Started GET "/api/v1/swagger_doc/video_fragments" for ::1 at 2015-12-28 14:02:27 -0600
+
+
+Started GET "/api/v1/swagger_doc/contacts" for ::1 at 2015-12-28 14:02:27 -0600
+
+
+Started GET "/api/v1/swagger_doc/video_fragments" for ::1 at 2015-12-28 14:02:27 -0600
+
+
+Started GET "/api/v1/video_fragments" for ::1 at 2015-12-28 14:02:38 -0600
+  [1m[36mVideoFragment Load (1.2ms)[0m  [1mSELECT "video_fragments".* FROM "video_fragments"[0m
