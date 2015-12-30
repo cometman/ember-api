@@ -13,11 +13,12 @@ gem "pg"
 gem "rack-cors", require: "rack/cors"
 gem "sass-rails", "~> 4.0.3"
 gem "uglifier", ">= 1.3.0"
-# M3u8 generator
+
+# HLS & Video gems
 gem "m3uzi"
 gem "m3u8"
+gem 'streamio-ffmpeg'
 gem "paperclip", "~> 4.3"
-gem "mime-types"
 
 group :development do
   gem "better_errors"
@@ -27,6 +28,7 @@ group :development do
 end
 
 group :development, :test do
+  gem "byebug"
   gem "capybara"
   gem "capybara-screenshot"
   gem "database_cleaner"
