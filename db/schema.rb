@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151228190327) do
+ActiveRecord::Schema.define(version: 20151229195503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,11 @@ ActiveRecord::Schema.define(version: 20151228190327) do
 
   add_index "contacts", ["business_id"], name: "index_contacts_on_business_id", using: :btree
 
+  create_table "playlists", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "video_fragments", force: :cascade do |t|
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
@@ -74,7 +79,10 @@ ActiveRecord::Schema.define(version: 20151228190327) do
     t.string   "fragment_content_type"
     t.integer  "fragment_file_size"
     t.datetime "fragment_updated_at"
+    t.integer  "playlist_id"
   end
+
+  add_index "video_fragments", ["playlist_id"], name: "index_playlist_id", using: :btree
 
   add_foreign_key "contacts", "businesses"
 end

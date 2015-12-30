@@ -179,6 +179,7 @@ GEM
       addressable (~> 2.3)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
+    m3u8 (0.6.1)
     m3uzi (0.5.1)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
@@ -359,8 +360,10 @@ DEPENDENCIES
   grape-active_model_serializers
   grape-swagger-rails
   jquery-rails
+  m3u8
   m3uzi
   meta_request
+  mime-types
   paperclip (~> 4.3)
   pg
   poltergeist

@@ -15,8 +15,9 @@ gem "sass-rails", "~> 4.0.3"
 gem "uglifier", ">= 1.3.0"
 # M3u8 generator
 gem "m3uzi"
+gem "m3u8"
 gem "paperclip", "~> 4.3"
-
+gem "mime-types"
 
 group :development do
   gem "better_errors"
