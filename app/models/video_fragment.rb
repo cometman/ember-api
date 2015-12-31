@@ -28,9 +28,10 @@ class VideoFragment < ActiveRecord::Base
       if entries.modulo(1) > 0.01
         entries += 1
       end
-      # Write the entry to the m3u8 playlist
-      byebug
-      (0..(entries.to_i - 1)).each do |x|
+      entries = entries.to_i
+      entry_zero_index = entries - 1
+      # Write the entry to the m3u8 playlist (Subtract one from entires for 0 based index)
+      (0..entry_zero_index).each do |x|
         segment_count = (Playlist.find(self.playlist.id).fragment_count + x )
         fragment_duration = FFMPEG::Movie.new("#{self.playlist.directory+fragment_prefix+segment_count.to_s}.ts").duration
         File.open("#{self.playlist.directory}prog_index.m3u8", 'a') { |f|
@@ -39,9 +40,7 @@ class VideoFragment < ActiveRecord::Base
         }
       end
     end
-    self.playlist.fragment_count += entries.to_i
+    self.playlist.fragment_count += entries
     self.playlist.save
-    #Playlist.increment_counter(:fragment_count, entries.to_i)
-
   end
 end
