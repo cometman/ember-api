@@ -5,7 +5,7 @@ class VideoFragment < ActiveRecord::Base
   after_commit :encode_fragment
 
   has_attached_file :fragment
-  validates_attachment_content_type :fragment, :content_type => ["video", "video\/MP2T", "video\/mp2t", "video/mp4", "video.MOV", "video/mpeg","video/mpeg4"]
+  validates_attachment_content_type :fragment, :content_type => ["video", "video\/MP2T", "video/quicktime", "video\/mp2t", "video/mp4", "video.MOV", "video/mpeg","video/mpeg4"]
 
   belongs_to :playlist
 

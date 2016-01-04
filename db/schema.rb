@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20151230215020) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "fragment_count", default: 0, null: false
+    t.string   "name"
   end
 
   create_table "video_fragments", force: :cascade do |t|

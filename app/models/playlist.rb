@@ -8,11 +8,11 @@ class Playlist < ActiveRecord::Base
   end
 
   def playlist_url
-    ENV["ROOT_URL"] + "/public/video/#{self.id}/prog_index.m3u8"
+    ENV["ROOT_URL"] + "/video/#{self.id}/prog_index.m3u8"
   end
 
   def video_url
-    ENV["ROOT_URL"] + "/public/video/#{self.id}/"
+    ENV["ROOT_URL"] + "/video/#{self.id}/"
   end
 
   # Create folder and playlist for content
