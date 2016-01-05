@@ -6,7 +6,7 @@ class VideoFragment < ActiveRecord::Base
 
   has_attached_file :fragment
   validates_attachment_content_type :fragment, :content_type => ["video", "video\/MP2T", "video/quicktime", "video\/mp2t", "video/mp4", "video.MOV", "video/mpeg","video/mpeg4"]
-
+  validates :fragment, presence: true
   belongs_to :playlist
 
   # Encode the fragment into mpeg2-ts. Mediafilesegmenter provided by Apple does segmentation.
@@ -15,7 +15,6 @@ class VideoFragment < ActiveRecord::Base
     fragment_prefix = "Fragment#{self.playlist.id}_"
     # Obtain duration of the clip.  Used to append to playlist
     duration = FFMPEG::Movie.new(self.fragment.path).duration
-    number_of_segments = duration / FRAGMENT_SIZE
     encode_command = system("mediafilesegmenter -z none -i tmp.m3u8 -t #{FRAGMENT_SIZE} #{self.fragment.path} -B #{fragment_prefix} -f #{self.playlist.directory}")
     unless encode_command
       raise "Mediafilesegmenter failed!"
